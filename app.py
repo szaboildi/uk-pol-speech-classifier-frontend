@@ -12,18 +12,19 @@ api_form = st.form(key='api_form')
 speech = api_form.text_input(label="Political speech (400-600 words):", value="")
 submitted = api_form.form_submit_button(label='Guess the party!')
 
-party_key = {
-    "Con": "Conservative Party",
-    "Lab": "Labour Party",
-    "LibDem": "Liberal Democrats",
-    "SNP": "Scottish National Party",
-    "DUP": "Democratic Unionist Party",
-    "UUP": "Ulster Unionist Party",
-    "PlaidCymru": "Plaid Cymru"
-}
 
 # Make the API request when the button is pushed
 def make_request(url, params):
+    party_key = {
+        "Con": "Conservative Party",
+        "Lab": "Labour Party",
+        "LibDem": "Liberal Democrats",
+        "SNP": "Scottish National Party",
+        "DUP": "Democratic Unionist Party",
+        "UUP": "Ulster Unionist Party",
+        "PlaidCymru": "Plaid Cymru"
+    }
+
     response = requests.get(url=url, params=params)
     result = response.json()
     return f"""{party_key[result['party']]}"""
