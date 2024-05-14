@@ -18,7 +18,15 @@ party_code_to_name = {
         "PlaidCymru": "Plaid Cymru"
     }
 party_name_to_code = {v: k for k,v in party_code_to_name.items()}
-
+party_desc = {
+    "Con": "The Conservative Party, or Tories, are one of the UK's two primary political forces. With a core attachment to economic liberalism, they have tended to embrace free-market policies. The party of Churchill, Thatcher and British unionism, their voters are historically conservative on social issues, with strong support among homeowners, farmers and landlords in rural constituencies.",
+    "Lab": "The Labour Party are of the UK's two main political entities, second only to the Conservatives in their historical success. Emerging from trade unions and socialism, it has tended to embrace public investment, spending more on health and education than its counterpart, as well as maintaining more socially inclusive ideologies.",
+    "LibDem": "Often considered the more \"progressive\" of the major parties, the Lib Dems tend to support socially liberal approaches to cultural issues such as education, criminal rights, LGBT rights and drug liberalisation. Their support tends to come from younger voters, especially in metropolitan constituencies.",
+    "SNP": "The Scottish National Party supports and campaigns for Scottish Independence from the United Kingdom, as well as Scottish membership to the European Union. Politically they sit centre-left, with socially progressive policies, and receive the largest share of Scottish support.",
+    "DUP": "The Democratic Union Party is a Northern Irish political party that supports the union of Northern Ireland with the United Kingdom. They tend to embrace right-wing economic policy, campaigning along socially conservative lines against issues such as abortion and same-sex marriage.",
+    "UUP": "Ulster Unionist Party",
+    "PlaidCymru": "Plaid Cymru"
+}
 
 ##### Retrieving a random speech to test the app on #####
 st.markdown(f"### If you don\'t have a speech ready, we can get a random one for you!")
@@ -47,21 +55,22 @@ if submitted_random:
 ##### Guessing the party #####
 st.markdown(f'\n\n\n ### Let us guess what party gave your speech!')
 api_form_predict = st.form(key='api_form_predict')
-speech = api_form_predict.text_input(label="Your political speech (400-600 words):", value="")
+speech = api_form_predict.text_input(label="Your parliamentary speech (400-600 words):", value="")
 submitted_predict = api_form_predict.form_submit_button(label='Guess the party!')
 
 
 # Make the API request when the button is pushed
-def make_request_predict(url, params, parties):
+def make_request_predict(url, params):
     response = requests.get(url=url, params=params)
     result = response.json()
-    return f"""{parties[result['party']]}"""
+    return f"""{result['party']}"""
 
 if submitted_predict:
     params_predict = {
         "speech": speech,
     }
 
-    response = make_request_predict(predict_url, params_predict, party_code_to_name)
-    st.markdown(f'### {response}!')
+    response = make_request_predict(predict_url, params_predict)
+    st.markdown(f'### {party_code_to_name[response]}!')
+    st.markdown(f'{party_desc[response]}')
     st.balloons()
