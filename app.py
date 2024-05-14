@@ -4,8 +4,8 @@ import requests
 # Polclassifier frontend
 '''
 
-predict_url = "https://svm-pvutvs4yla-ew.a.run.app/predict"
-random_speech_url = "https://svm-pvutvs4yla-ew.a.run.app/speech"
+predict_url = "https://svm6-pvutvs4yla-ew.a.run.app/predict"
+random_speech_url = "https://svm6-pvutvs4yla-ew.a.run.app/speech"
 
 
 party_code_to_name = {
