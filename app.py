@@ -2,7 +2,7 @@ import streamlit as st
 import requests
 
 st.markdown("<h1 style='color:#235857'>\"Spoken like a true LibDem!\"</h1>", unsafe_allow_html=True)
-st.markdown("<h3 style='color:#235857'><i>A party-classifier for UK parliamentary speeches<i></h3>", unsafe_allow_html=True)
+st.markdown("<h3 style='color:#235857; margin-top:-1.5rem'><i>A party-classifier for UK parliamentary speeches<i></h3>", unsafe_allow_html=True)
 
 predict_url = "https://svm6-pvutvs4yla-ew.a.run.app/predict"
 random_speech_url = "https://svm6-pvutvs4yla-ew.a.run.app/speech"
@@ -29,7 +29,7 @@ party_desc = {
 }
 
 ##### Retrieving a random speech to test the app on #####
-st.markdown(f"### If you don\'t have a speech ready, we can get a random one for you!")
+st.markdown(f"#### If you don\'t have a speech ready, we can get a random one for you!")
 
 api_form_random = st.form(key='api_form_random')
 party = api_form_random.selectbox(label="Party:", options=party_name_to_code.keys())
@@ -47,15 +47,15 @@ if submitted_random:
     }
 
     response = make_request_random(random_speech_url, params_random)
-    st.markdown(f"#### Here's your speech:")
-    st.markdown(f'{response}')
+    st.markdown(f"##### Here's your speech:")
+    st.code(f'{response}')
     st.balloons()
 
 
 ##### Guessing the party #####
-st.markdown(f'\n\n\n ### Let us guess what party gave your speech!')
+st.markdown(f'\n\n\n #### Let us guess what party gave your speech!')
 api_form_predict = st.form(key='api_form_predict')
-speech = api_form_predict.text_input(label="Your parliamentary speech (400-600 words):", value="")
+speech = api_form_predict.text_input(label="Your parliamentary speech (at least 400 words):", value="")
 submitted_predict = api_form_predict.form_submit_button(label='Guess the party!')
 
 
@@ -71,6 +71,6 @@ if submitted_predict:
     }
 
     response = make_request_predict(predict_url, params_predict)
-    st.markdown(f'### {party_code_to_name[response]}!')
+    st.markdown(f'#### {party_code_to_name[response]}!')
     st.markdown(f'{party_desc[response]}')
     st.balloons()
