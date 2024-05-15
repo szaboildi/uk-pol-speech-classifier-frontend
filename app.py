@@ -74,3 +74,6 @@ if submitted_predict:
     st.markdown(f'#### {party_code_to_name[response]}!')
     st.markdown(f'{party_desc[response]}')
     st.balloons()
+
+st.markdown("<script src='jquery.js'></script><script>$(function(){$('#includedContent').load('data/temp.html');});</script>",
+            unsafe_allow_html=True)
