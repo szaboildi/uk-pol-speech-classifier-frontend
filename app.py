@@ -2,7 +2,7 @@ import streamlit as st
 import requests
 
 st.markdown("<h1 style='color:#235857'>\"Spoken like a true LibDem!\"</h1>", unsafe_allow_html=True)
-st.markdown("<h3 style='color:#235857; margin-top:-1.5rem'><i>A party-classifier for UK parliamentary speeches<i></h3>", unsafe_allow_html=True)
+st.markdown("<h3 style='color:#235857; margin-top:-1.5rem'><i>Classiying UK Parliamentary Speeches along Party Lines<i></h3>", unsafe_allow_html=True)
 
 predict_url = "https://svm6-pvutvs4yla-ew.a.run.app/predict"
 random_speech_url = "https://svm6-pvutvs4yla-ew.a.run.app/speech"
