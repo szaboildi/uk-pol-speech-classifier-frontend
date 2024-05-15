@@ -23,9 +23,9 @@ party_desc = {
     "Lab": "The Labour Party are of the UK's two main political entities, second only to the Conservatives in their historical success. Emerging from trade unions and socialism, it has tended to embrace public investment, spending more on health and education than its counterpart, as well as maintaining more socially inclusive ideologies.",
     "LibDem": "Often considered the more \"progressive\" of the major parties, the Lib Dems tend to support socially liberal approaches to cultural issues such as education, criminal rights, LGBT rights and drug liberalisation. Their support tends to come from younger voters, especially in metropolitan constituencies.",
     "SNP": "The Scottish National Party supports and campaigns for Scottish Independence from the United Kingdom, as well as Scottish membership to the European Union. Politically they sit centre-left, with socially progressive policies, and receive the largest share of Scottish support.",
-    "DUP": "The Democratic Union Party is a Northern Irish political party that supports the union of Northern Ireland with the United Kingdom. They tend to embrace right-wing economic policy, campaigning along socially conservative lines against issues such as abortion and same-sex marriage.",
-    "UUP": "Ulster Unionist Party",
-    "PlaidCymru": "Plaid Cymru"
+    "DUP": "The Democratic Unionist Party is a Northern Irish political party that supports the union of Northern Ireland with the United Kingdom. They tend to embrace right-wing economic policy, campaigning along socially conservative lines against issues such as abortion and same-sex marriage.",
+    "UUP": "The Ulster Unionist Party is the second biggest Unionist party in Northern Ireland, having been overtaken by the DUP in 2003. They were the governing body of Northern Ireland for much of the twentieth century, most notably representing unionist views during the Troubles, and ultimately helping to negotiate the Good Friday Agreement that ended the conflict.",
+    "PlaidCymru": "The official party of Wales, Plaid Cymru (pronounced \"plyde KUM-ree\") supports and campaigns for Welsh independence from the United Kingdom. They tend to campaign on centre-left, progressive social policies such as lowering the voting age and free school meals."
 }
 
 ##### Retrieving a random speech to test the app on #####
