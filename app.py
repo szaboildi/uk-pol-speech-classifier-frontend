@@ -1,13 +1,11 @@
 import streamlit as st
-import streamlit.components.v1 as components
 import requests
+'''
+# Polclassifier frontend
+'''
 
-st.markdown("<h1 style='color:#235857'>\"Spoken like a true LibDem!\"</h1>", unsafe_allow_html=True)
-st.markdown("<h3 style='color:#235857; margin-top:-1.5rem'><i>Classifying UK Parliamentary Speeches along Party Lines<i></h3>", unsafe_allow_html=True)
-
-predict_url = "https://svm9-pvutvs4yla-ew.a.run.app/predict"
-random_speech_url = "https://svm9-pvutvs4yla-ew.a.run.app/speech"
-shap_url = "https://svm9-pvutvs4yla-ew.a.run.app/visualisation"
+predict_url = "https://svm6-pvutvs4yla-ew.a.run.app/predict"
+random_speech_url = "https://svm6-pvutvs4yla-ew.a.run.app/speech"
 
 
 party_code_to_name = {
@@ -31,11 +29,11 @@ party_desc = {
 }
 
 ##### Retrieving a random speech to test the app on #####
-st.markdown(f"#### If you don\'t have a speech ready, we can get a random one for you!")
+st.markdown(f"### Try out a random speech:")
 
 api_form_random = st.form(key='api_form_random')
 party = api_form_random.selectbox(label="Party:", options=party_name_to_code.keys())
-submitted_random = api_form_random.form_submit_button(label='Give me a random speech from this party!')
+submitted_random = api_form_random.form_submit_button(label='Give me a speech!')
 
 
 def make_request_random(url, params):
@@ -49,40 +47,30 @@ if submitted_random:
     }
 
     response = make_request_random(random_speech_url, params_random)
-    st.markdown(f"##### Here's your speech:")
+    st.markdown(f"#### Copy this extract into the guesser below:")
     st.markdown(f'{response}')
+    st.balloons()
 
 
 ##### Guessing the party #####
-st.markdown(f'\n\n\n #### Let us guess what party gave your speech!')
+st.markdown(f'\n\n\n ### Party Guesser:')
 api_form_predict = st.form(key='api_form_predict')
-speech = api_form_predict.text_input(label="Your parliamentary speech (at least 400 words):", value="")
-submitted_predict = api_form_predict.form_submit_button(label='Guess the party!')
+speech = api_form_predict.text_input(label="Your parliamentary speech (at least 150 words):", value="")
+submitted_predict = api_form_predict.form_submit_button(label='Take a guess!')
 
 
 # Make the API request when the button is pushed
-def make_request_predict(url, visual_url, params):
+def make_request_predict(url, params):
     response = requests.get(url=url, params=params)
     result = response.json()
-
-    html = requests.get(url=visual_url, params=params).text
-    print(html[:50])
-
-    return f"""{result['party']}""", f"{round(float(result['probability'])*100, 2)}%", html
+    return f"""{result['party']}"""
 
 if submitted_predict:
     params_predict = {
         "speech": speech,
     }
 
-    response = make_request_predict(predict_url, shap_url, params_predict)
-
-    st.markdown(f'#### {party_code_to_name[response[0]]}!')
-    st.markdown(f'<div style="margin-top:-1rem">{response[1]} probability</div>', unsafe_allow_html=True)
-    st.markdown(f'{party_desc[response[0]]}')
-
-
-
-#with open( "data/temp.html" ) as html_f:
-    components.html(response[2], height=800)
-    # st.markdown( f'{html_f.read()}' , unsafe_allow_html= True)
+    response = make_request_predict(predict_url, params_predict)
+    st.markdown(f'### {party_code_to_name[response]}!')
+    st.markdown(f'{party_desc[response]}')
+    st.balloons()
