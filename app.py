@@ -1,4 +1,5 @@
 import streamlit as st
+import streamlit.components.v1 as components
 import requests
 
 st.markdown("<h1 style='color:#235857'>\"Spoken like a true LibDem!\"</h1>", unsafe_allow_html=True)
@@ -70,6 +71,14 @@ if submitted_predict:
     }
 
     response = make_request_predict(predict_url, params_predict)
+
     st.markdown(f'#### {party_code_to_name[response[0]]}!')
     st.markdown(f'<div style="margin-top:-1rem">{response[1]} probability</div>', unsafe_allow_html=True)
     st.markdown(f'{party_desc[response[0]]}')
+
+
+
+with open( "data/temp.html" ) as html_f:
+    components.html(html_f.read(), height=800)
+    # st.markdown( f'{html_f.read()}' , unsafe_allow_html= True)
+
