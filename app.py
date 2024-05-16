@@ -1,12 +1,14 @@
 import streamlit as st
+import streamlit.components.v1 as components
 import requests
 
-st.markdown("<h1 style='color:#235857'>\"Spoken like a true LibDem!\"</h1>", unsafe_allow_html=True)
+
+st.markdown("<h1 style='color:#235857'>\"Spoken Like a True Lib Dem!\"</h1>", unsafe_allow_html=True)
 st.markdown("<h3 style='color:#235857; margin-top:-1.5rem'><i>Classifying UK Parliamentary Speeches along Party Lines<i></h3>", unsafe_allow_html=True)
 
-predict_url = "https://svm8-pvutvs4yla-ew.a.run.app/predict"
-random_speech_url = "https://svm8-pvutvs4yla-ew.a.run.app/speech"
-
+predict_url = "https://svm9-pvutvs4yla-ew.a.run.app/predict"
+random_speech_url = "https://svm9-pvutvs4yla-ew.a.run.app/speech"
+shap_url = "https://svm9-pvutvs4yla-ew.a.run.app/visualisation"
 
 party_code_to_name = {
         "Con": "Conservative Party",
@@ -28,12 +30,33 @@ party_desc = {
     "PlaidCymru": "The official party of Wales, Plaid Cymru (pronounced \"plyde KUM-ree\") supports and campaigns for Welsh independence from the United Kingdom. They tend to campaign on centre-left, progressive social policies such as lowering the voting age and free school meals."
 }
 
+
+##### Layout and style #####
+with st.sidebar:
+    project = st.markdown(
+        "<div class='sidetext'>You can find our code <a href='https://github.com/szaboildi/uk-pol-speech-classifier'>here.</a></div>",
+        unsafe_allow_html=True)
+
+    about = st.markdown(
+        """<div class='sidetext' style='margin-top:2rem;'>The project team:
+        <ul>
+            <li><a href="https://github.com/Raducu85">Radu Burtescu</a></li>
+            <li><a href="https://github.com/jonahramchandani">Jonah Ramchandani</a></li>
+            <li><a href=https://github.com/szaboildi">Ildi Szabo</a></li>
+            <li><a href="https://github.com/Seoman3">Hai Linh Trieu</a></li>
+        </ul>
+        </div>""", unsafe_allow_html=True)
+
+with open( "styling.css" ) as css:
+    st.markdown( f'<style>{css.read()}</style>' , unsafe_allow_html= True)
+
+
 ##### Retrieving a random speech to test the app on #####
-st.markdown(f"#### If you don\'t have a speech ready, we can get a random one for you!")
+st.markdown(f"### Try out a random speech:")
 
 api_form_random = st.form(key='api_form_random')
 party = api_form_random.selectbox(label="Party:", options=party_name_to_code.keys())
-submitted_random = api_form_random.form_submit_button(label='Give me a random speech from this party!')
+submitted_random = api_form_random.form_submit_button(label='Give me a speech!')
 
 
 def make_request_random(url, params):
@@ -47,29 +70,42 @@ if submitted_random:
     }
 
     response = make_request_random(random_speech_url, params_random)
-    st.markdown(f"##### Here's your speech:")
+    st.markdown(f"#### Copy into the guesser below:")
     st.markdown(f'{response}')
 
 
 ##### Guessing the party #####
-st.markdown(f'\n\n\n #### Let us guess what party gave your speech!')
+st.markdown(f'\n\n\n ### Party Guesser:')
 api_form_predict = st.form(key='api_form_predict')
-speech = api_form_predict.text_input(label="Your parliamentary speech (at least 400 words):", value="")
-submitted_predict = api_form_predict.form_submit_button(label='Guess the party!')
+
+speech = api_form_predict.text_input(label="Your parliamentary speech (at least 150 words):", value="")
+submitted_predict = api_form_predict.form_submit_button(label='Take a guess!')
 
 
-# Make the API request when the button is pushed
+# Ask for prediction from the API
 def make_request_predict(url, params):
     response = requests.get(url=url, params=params)
     result = response.json()
+
     return f"""{result['party']}""", f"{round(float(result['probability'])*100, 2)}%"
+
+# Request shapley plot from API
+def make_request_shapley(url, params):
+    html = requests.get(url=url, params=params).text
+    return html
 
 if submitted_predict:
     params_predict = {
         "speech": speech,
     }
 
+    # Prediction
     response = make_request_predict(predict_url, params_predict)
     st.markdown(f'#### {party_code_to_name[response[0]]}!')
     st.markdown(f'<div style="margin-top:-1rem">{response[1]} probability</div>', unsafe_allow_html=True)
     st.markdown(f'{party_desc[response[0]]}')
+
+    # Shapley plot
+    shap_html = make_request_shapley(shap_url, params_predict)
+
+    components.html(shap_html, height=800)
