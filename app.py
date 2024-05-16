@@ -56,7 +56,7 @@ if submitted_random:
 ##### Guessing the party #####
 st.markdown(f'\n\n\n #### Let us guess what party gave your speech!')
 api_form_predict = st.form(key='api_form_predict')
-speech = api_form_predict.text_input(label="Your parliamentary speech (at least 400 words):", value="")
+speech = api_form_predict.text_input(label="Your parliamentary speech:", value="")
 submitted_predict = api_form_predict.form_submit_button(label='Guess the party!')
 
 
@@ -66,7 +66,6 @@ def make_request_predict(url, visual_url, params):
     result = response.json()
 
     html = requests.get(url=visual_url, params=params).text
-    print(html[:50])
 
     return f"""{result['party']}""", f"{round(float(result['probability'])*100, 2)}%", html
 
@@ -81,8 +80,23 @@ if submitted_predict:
     st.markdown(f'<div style="margin-top:-1rem">{response[1]} probability</div>', unsafe_allow_html=True)
     st.markdown(f'{party_desc[response[0]]}')
 
-
-
-#with open( "data/temp.html" ) as html_f:
     components.html(response[2], height=800)
-    # st.markdown( f'{html_f.read()}' , unsafe_allow_html= True)
+
+
+with st.sidebar:
+    project = st.markdown(
+        "<div class='sidetext'>You can find our code <a href='https://github.com/szaboildi/uk-pol-speech-classifier'>here.</a></div>",
+        unsafe_allow_html=True)
+
+    about = st.markdown(
+        """<div class='sidetext' style='margin-top:2rem;'>The project team:
+        <ul>
+            <li><a href="https://github.com/Raducu85">Radu Burtescu</a></li>
+            <li><a href="https://github.com/jonahramchandani">Jonah Ramchandani</a></li>
+            <li><a href=https://github.com/szaboildi">Ildi Szabo</a></li>
+            <li><a href="https://github.com/Seoman3">Hai Linh Trieu</a></li>
+        </ul>
+        </div>""", unsafe_allow_html=True)
+
+with open( "styling.css" ) as css:
+    st.markdown( f'<style>{css.read()}</style>' , unsafe_allow_html= True)

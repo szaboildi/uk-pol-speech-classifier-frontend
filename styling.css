@@ -1,0 +1,18 @@
+
+.sidetext {
+  color: black
+}
+
+/* unvisited link, visited link */
+.sidetext a:link, .sidetext a:visited {
+  color: #235857;
+}
+
+/* mouse over link, selected link*/
+.sidetext a:hover, .sidetext a:active {
+  color: #317b7a;
+}
+
+div.sidetext {
+  font-family: "Source Sans Pro", sans-serif;
+}
