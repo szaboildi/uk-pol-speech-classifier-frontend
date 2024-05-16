@@ -49,7 +49,6 @@ if submitted_random:
     response = make_request_random(random_speech_url, params_random)
     st.markdown(f"##### Here's your speech:")
     st.markdown(f'{response}')
-    st.balloons()
 
 
 ##### Guessing the party #####
@@ -63,7 +62,7 @@ submitted_predict = api_form_predict.form_submit_button(label='Guess the party!'
 def make_request_predict(url, params):
     response = requests.get(url=url, params=params)
     result = response.json()
-    return f"""{result['party']}"""
+    return f"""{result['party']}""", f"{round(float(result['probability'])*100, 2)}%"
 
 if submitted_predict:
     params_predict = {
@@ -71,6 +70,6 @@ if submitted_predict:
     }
 
     response = make_request_predict(predict_url, params_predict)
-    st.markdown(f'#### {party_code_to_name[response]}!')
-    st.markdown(f'{party_desc[response]}')
-    st.balloons()
+    st.markdown(f'#### {party_code_to_name[response[0]]}!')
+    st.markdown(f'<div style="margin-top:-1rem">{response[1]} probability</div>', unsafe_allow_html=True)
+    st.markdown(f'{party_desc[response[0]]}')
