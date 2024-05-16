@@ -47,7 +47,7 @@ if submitted_random:
     }
 
     response = make_request_random(random_speech_url, params_random)
-    st.markdown(f"#### Copy this extract into the guesser below:")
+    st.markdown(f"#### Copy into the guesser below:")
     st.markdown(f'{response}')
     st.balloons()
 
