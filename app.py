@@ -5,8 +5,9 @@ import requests
 st.markdown("<h1 style='color:#235857'>\"Spoken like a true LibDem!\"</h1>", unsafe_allow_html=True)
 st.markdown("<h3 style='color:#235857; margin-top:-1.5rem'><i>Classifying UK Parliamentary Speeches along Party Lines<i></h3>", unsafe_allow_html=True)
 
-predict_url = "https://svm8-pvutvs4yla-ew.a.run.app/predict"
-random_speech_url = "https://svm8-pvutvs4yla-ew.a.run.app/speech"
+predict_url = "https://svm9-pvutvs4yla-ew.a.run.app/predict"
+random_speech_url = "https://svm9-pvutvs4yla-ew.a.run.app/speech"
+shap_url = "https://svm9-pvutvs4yla-ew.a.run.app/visualisation"
 
 
 party_code_to_name = {
@@ -60,17 +61,21 @@ submitted_predict = api_form_predict.form_submit_button(label='Guess the party!'
 
 
 # Make the API request when the button is pushed
-def make_request_predict(url, params):
+def make_request_predict(url, visual_url, params):
     response = requests.get(url=url, params=params)
     result = response.json()
-    return f"""{result['party']}""", f"{round(float(result['probability'])*100, 2)}%"
+
+    html = requests.get(url=visual_url, params=params).text
+    print(html[:50])
+
+    return f"""{result['party']}""", f"{round(float(result['probability'])*100, 2)}%", html
 
 if submitted_predict:
     params_predict = {
         "speech": speech,
     }
 
-    response = make_request_predict(predict_url, params_predict)
+    response = make_request_predict(predict_url, shap_url, params_predict)
 
     st.markdown(f'#### {party_code_to_name[response[0]]}!')
     st.markdown(f'<div style="margin-top:-1rem">{response[1]} probability</div>', unsafe_allow_html=True)
@@ -78,7 +83,6 @@ if submitted_predict:
 
 
 
-with open( "data/temp.html" ) as html_f:
-    components.html(html_f.read(), height=800)
+#with open( "data/temp.html" ) as html_f:
+    components.html(response[2], height=800)
     # st.markdown( f'{html_f.read()}' , unsafe_allow_html= True)
-
